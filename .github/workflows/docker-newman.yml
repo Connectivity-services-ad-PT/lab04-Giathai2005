@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -17,7 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: npm
 
 
       - name: Install Node dependencies
@@ -42,26 +43,23 @@ jobs:
             --env-file .env.example \
             fit4110/iot-ingestion:lab04
 
-          sleep 5
+          sleep 10
 
+          echo "===== CONTAINER STATUS ====="
+          docker ps -a
 
-      - name: Check container startup
-        run: |
-          docker ps
-          echo "===== Docker logs ====="
+          echo "===== CONTAINER LOGS ====="
           docker logs fit4110-iot-lab04 || true
 
 
-      - name: Wait for service health
+      - name: Wait for container port
         run: |
-          npx wait-on \
-          http://localhost:8000/health \
-          --timeout 60000
+          npx wait-on tcp:8000 --timeout 60000
 
 
       - name: Test health endpoint
         run: |
-          curl http://localhost:8000/health
+          curl -v http://localhost:8000/health
 
 
       - name: Run Newman against Docker container
