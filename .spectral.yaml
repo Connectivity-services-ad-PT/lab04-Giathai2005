@@ -1,14 +1,3 @@
-extends: ["spectral:oas"]
+extends: spectral:oas
 
-rules:
-  operation-description:
-    severity: off
-
-  operation-summary:
-    severity: off
-
-  info-contact:
-    severity: off
-
-  license-url:
-    severity: off
+rules: {}
